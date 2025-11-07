@@ -55,6 +55,6 @@ jobs:
     - name: Deploy to GKE
       # The set image command ensures the Deployment uses the latest pushed image tag (github.sha)
       run: |
-        kubectl set image deployment/api-deployment microservice-container=${{ env.ARTIFACT_REGISTRY }}:${{ env.IMAGE_TAG }} -n default
         kubectl apply -f kubernetes/microservice-deployment.yaml -n default
         kubectl apply -f kubernetes/microservice-service.yaml -n default
+        kubectl set image deployment/api-deployment microservice-container=${{ env.ARTIFACT_REGISTRY }}:${{ env.IMAGE_TAG }} -n default
