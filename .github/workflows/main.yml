@@ -17,7 +17,7 @@ jobs:
   build-and-deploy:
     name: Build, Push, and Deploy
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: 'read'
       id-token: 'write' # Required for advanced authentication methods, good practice
@@ -30,7 +30,7 @@ jobs:
     - name: Set up GCP Credentials
       uses: 'google-github-actions/auth@v2'
       with:
-        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
         
     - name: Configure Docker to use Artifact Registry
       # Note: Artifact Registry requires PROJECT_ID in the command line
