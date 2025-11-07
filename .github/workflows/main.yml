@@ -17,6 +17,7 @@ jobs:
   build-and-deploy:
     name: Build, Push, and Deploy
     runs-on: ubuntu-latest
+    
     permissions:
       contents: 'read'
       id-token: 'write' # Required for advanced authentication methods, good practice
