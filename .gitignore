@@ -1,3 +1,7 @@
-echo "sa-key.json" >> .gitignore
-echo "*.tfstate*" >> .gitignore
-echo ".terraform/" >> .gitignore
+# Terraform Files
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Credentials / Secrets
+sa-key.json
