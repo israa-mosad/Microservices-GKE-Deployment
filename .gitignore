@@ -4,8 +4,4 @@
 *.tfstate.*
 
 # Credentials / Secrets
-<<<<<<< Updated upstream
 sa-key.json
-=======
-sa-key.json
->>>>>>> Stashed changes
