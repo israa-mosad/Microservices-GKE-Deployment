@@ -1,0 +1,3 @@
+echo "sa-key.json" >> .gitignore
+echo "*.tfstate*" >> .gitignore
+echo ".terraform/" >> .gitignore

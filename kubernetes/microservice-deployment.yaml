@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 2 # Recommended to use more than 1 for redundancy
+  selector:
+    matchLabels:
+      app: microservice-api
+  template:
+    metadata:
+      labels:
+        app: microservice-api
+    spec:
+      containers:
+        - name: microservice-container
+          image: us-central1-docker.pkg.dev/esraa-k8s-microservice/my-repo/microservice:latest
+          ports:
+            - containerPort: 5000
