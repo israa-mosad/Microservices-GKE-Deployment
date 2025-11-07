@@ -1,0 +1,54 @@
+name: Deploy Microservice to GKE
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual trigger
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }} # Uses the secret
+  GKE_CLUSTER: microservice-gke-cluster 
+  GKE_ZONE: us-central1-a 
+  ARTIFACT_REGISTRY: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/microservice
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build-and-deploy:
+    name: Build, Push, and Deploy
+    runs-on: ubuntu-latest
+    
+    # --- 1. Authentication ---
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up GCP Credentials
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        
+    - name: Configure Docker to use Artifact Registry
+      # Note: Artifact Registry requires PROJECT_ID in the command line
+      run: gcloud auth configure-docker us-central1-docker.pkg.dev
+      
+    # --- 2. Build and Push Image ---
+    - name: Build Docker Image
+      run: docker build -t ${{ env.ARTIFACT_REGISTRY }}:${{ env.IMAGE_TAG }} .
+
+    - name: Push Docker Image to Artifact Registry
+      run: docker push ${{ env.ARTIFACT_REGISTRY }}:${{ env.IMAGE_TAG }}
+      
+    # --- 3. Deployment to GKE ---
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        
+    - name: Deploy to GKE
+      # The set image command ensures the Deployment uses the latest pushed image tag (github.sha)
+      run: |
+        kubectl set image deployment/api-deployment microservice-container=${{ env.ARTIFACT_REGISTRY }}:${{ env.IMAGE_TAG }} -n default
+        kubectl apply -f kubernetes/microservice-deployment.yaml -n default
+        kubectl apply -f kubernetes/microservice-service.yaml -n default
