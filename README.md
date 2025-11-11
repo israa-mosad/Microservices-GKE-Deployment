@@ -107,6 +107,12 @@ terraform apply
 
 The deployment is automated via a GitHub Actions workflow that successfully executes the build, push to Artifact Registry, and deployment process.
 
+<img width="704" height="331" alt="image" src="https://github.com/user-attachments/assets/2c235df9-0e8f-4bc1-a585-6fee560a48e6" />
+
+<img width="706" height="317" alt="image" src="https://github.com/user-attachments/assets/f98294d7-60e9-45b7-aa40-f1e355dce0aa" />
+
+
+
 ### Verification Proof (Pod Status)
 
 The deployment resulted in two running Pods for the microservice and all monitoring components.
@@ -161,3 +167,4 @@ kubectl port-forward svc/prometheus-stack-grafana 3000:80
 <img width="958" height="470" alt="grafana_app_pod_metrics png" src="https://github.com/user-attachments/assets/71d1840a-d042-49ad-a128-2be491683237" />
 
 The Grafana dashboard shows Pod-level metrics, validating the monitoring setup is functional and scraping the application metrics.
+
